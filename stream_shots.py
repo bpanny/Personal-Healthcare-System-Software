@@ -3,7 +3,8 @@ import cv2
 import numpy as np
 import time
 from datetime import datetime
-import uploader
+from uploader import uploader
+from emergency_manager import emergency_manager
 
 # Define the send_message function
 def send_message(pt_id, message):
@@ -13,7 +14,10 @@ def send_message(pt_id, message):
         "message": message,
         "timestamp": timestamp
     }
-    uploader.uploader(message_data)
+    if message == "help":  
+        emergency_manager(pt_id)
+    uploader(message_data)
+
 
 # Load the cascade classifier for hand detection
 hand_cascade = cv2.CascadeClassifier("hand.xml")
@@ -21,6 +25,7 @@ hand_cascade = cv2.CascadeClassifier("hand.xml")
 # URL of the livestream
 url = "http://10.0.0.184:8080/shot.jpg"
 pt_id = 1
+
 # Create a loop that fetches the latest frame every 2 seconds
 while True:
     # Open the URL using urllib and convert the response into a NumPy array

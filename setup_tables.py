@@ -68,6 +68,37 @@ def create_interaction_table_if_not_exists(connection):
     """)
     connection.commit()
 
+def create_emergency_log_table(connection):
+    cursor = connection.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS emergency_log (
+        log_id INT AUTO_INCREMENT PRIMARY KEY,
+        pt_id INT NOT NULL,
+        staff_id INT NOT NULL,
+        message_count INT NOT NULL,
+        timestamp DATETIME NOT NULL,
+        FOREIGN KEY (pt_id) REFERENCES patients(pt_id),
+        FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
+    )
+    """)
+    connection.commit()
+
+def create_past_emergency_log_table(connection):
+    cursor = connection.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS past_emergency_log (
+        log_id INT AUTO_INCREMENT PRIMARY KEY,
+        pt_id INT NOT NULL,
+        staff_id INT NOT NULL,
+        message_count INT NOT NULL,
+        timestamp DATETIME NOT NULL,
+        FOREIGN KEY (pt_id) REFERENCES patients(pt_id),
+        FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
+    )
+    """)
+    connection.commit()
+
+
 def insert_fake_patient(connection):
     fake_first_name = "John"
     fake_last_name = "Doe"
@@ -105,7 +136,7 @@ def drop_all_tables(connection):
     cursor = connection.cursor()
     cursor.execute(
         """
-        DROP TABLE IF EXISTS events, interactions, patients, staff
+        DROP TABLE IF EXISTS events, interactions, patients, staff, emergency_log, past_emergency_log
         """
     )
     connection.commit()
@@ -120,6 +151,8 @@ create_staff_table_if_not_exists(connection)
 create_patient_table_if_not_exists(connection)
 create_table_if_not_exists(connection)
 create_interaction_table_if_not_exists(connection)
+create_emergency_log_table(connection)
+create_past_emergency_log_table(connection)
 insert_fake_patient(connection)
 insert_fake_staff(connection)
 

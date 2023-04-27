@@ -7,6 +7,32 @@ from uploader import connect_to_db
 app = Flask(__name__)
 app.secret_key = "software"
 
+@app.route('/', methods=['GET', 'POST'])
+def staff_login():
+    if request.method == 'POST':
+        staff_id = request.form['staff_id']
+        staff_email = request.form['staff_email']
+        staff_phone = request.form['staff_phone']
+
+        # Check if the entered credentials match a staff record in the database
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT * FROM staff
+            WHERE staff_id = %s AND staff_email = %s AND staff_phone = %s
+        """, (staff_id, staff_email, staff_phone))
+        staff = cursor.fetchone()
+        cursor.close()
+
+        if staff:
+            flash("Logged in successfully!")
+            return redirect(url_for('add_interaction'))
+        else:
+            flash("Invalid staff credentials!")
+
+    return render_template('staff_login.html')
+
+
 # Route and function for staff adding interaction
 @app.route('/add_interaction', methods=['GET', 'POST'])
 def add_interaction():
@@ -45,6 +71,8 @@ def add_interaction():
         return redirect(url_for('add_interaction'))
 
     return render_template('add_interaction.html')
+
+app.url_map.strict_slashes = False
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -6,7 +6,7 @@ from datetime import datetime
 from uploader import uploader
 from emergency_manager import emergency_manager
 
-# Define the send_message function
+# Upload message and include the emergency manager in the loop if the message is "help"
 def send_message(pt_id, message):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     message_data = {
@@ -23,10 +23,10 @@ def send_message(pt_id, message):
 hand_cascade = cv2.CascadeClassifier("hand.xml")
 
 # URL of the livestream
-url = "http://10.0.0.184:8080/shot.jpg"
+url = "http://10.140.26.214:8080/shot.jpg"
 pt_id = 1
 
-# Create a loop that fetches the latest frame every 2 seconds
+# Loop that fetches the latest frame every 2 seconds
 while True:
     # Open the URL using urllib and convert the response into a NumPy array
     img_arr = np.array(bytearray(urllib.request.urlopen(url).read()), dtype=np.uint8)
@@ -40,7 +40,7 @@ while True:
     # Detect hands in the image using the cascade classifier
     hands = hand_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
 
-    # Check if hands are detected or not
+    # "Help" if hands are detected and "safe" if not detected.
     if len(hands) > 0:
         print("help")
         send_message(pt_id, "help")

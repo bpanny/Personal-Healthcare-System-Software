@@ -1,7 +1,7 @@
 import mysql.connector
 import random
 
-# Set up the MySQL connection
+# Setup DB connection
 def connect_to_db():
     connection = mysql.connector.connect(
         host="localhost",
@@ -11,8 +11,7 @@ def connect_to_db():
     )
     return connection
 
-# Create patient events table in phs database
-def create_table_if_not_exists(connection):
+def create_stream_table_if_not_exists(connection):
     cursor = connection.cursor()
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS events (
@@ -25,7 +24,6 @@ def create_table_if_not_exists(connection):
     """)
     connection.commit()
 
-# CREATE TABLE phs.patients (id_number INT PRIMARY KEY);
 def create_patient_table_if_not_exists(connection):
     cursor = connection.cursor()
     cursor.execute("""
@@ -34,12 +32,12 @@ def create_patient_table_if_not_exists(connection):
         pt_first_name VARCHAR(255) NOT NULL,
         pt_last_name VARCHAR(255) NOT NULL,
         pt_location VARCHAR(255) NOT NULL,
-        pt_phone VARCHAR(20) NOT NULL
+        pt_phone VARCHAR(20) NOT NULL,
+        pt_address VARCHAR(255) NOT NULL
     )
     """)
     connection.commit()
 
-# CREATE TABLE phs.interactions (id_number INT PRIMARY KEY);
 def create_staff_table_if_not_exists(connection):
     cursor = connection.cursor()
     cursor.execute("""
@@ -98,20 +96,20 @@ def create_past_emergency_log_table(connection):
     """)
     connection.commit()
 
-
 def insert_fake_patient(connection):
     fake_first_name = "John"
     fake_last_name = "Doe"
     fake_location = "15213"
     fake_phone = f"555-{random.randint(100, 999)}-{random.randint(1000, 9999)}"
+    fake_address = "4200 5th Ave, Pittsburgh, PA 15213"
 
     cursor = connection.cursor()
     cursor.execute(
         """
-        INSERT INTO patients (pt_id, pt_first_name, pt_last_name, pt_location, pt_phone)
-        VALUES (%s, %s, %s, %s, %s)
+        INSERT INTO patients (pt_id, pt_first_name, pt_last_name, pt_location, pt_phone, pt_address)
+        VALUES (%s, %s, %s, %s, %s, %s)
         """,
-        (1, fake_first_name, fake_last_name, fake_location, fake_phone)
+        (1, fake_first_name, fake_last_name, fake_location, fake_phone, fake_address)
     )
     connection.commit()
     
@@ -144,12 +142,10 @@ def drop_all_tables(connection):
 # Set up the MySQL connection
 connection = connect_to_db()
 
-# Insert a single fake patient into the database
-
 drop_all_tables(connection)
 create_staff_table_if_not_exists(connection)
 create_patient_table_if_not_exists(connection)
-create_table_if_not_exists(connection)
+create_stream_table_if_not_exists(connection)
 create_interaction_table_if_not_exists(connection)
 create_emergency_log_table(connection)
 create_past_emergency_log_table(connection)

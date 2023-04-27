@@ -47,7 +47,6 @@ def send_message_to_closest_staff(pt_id, pt_location, available_staff_locations)
             closest_distance = distance
             closest_staff_id = staff_id
 
-    # Sending a message (replace with actual implementation)
     print(f"Sending message to staff {closest_staff_id}")
 
     return closest_staff_id

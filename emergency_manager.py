@@ -61,9 +61,9 @@ def send_email_to_staff(staff_email, subject, body):
     message["To"] = staff_email
 
     # Send the email using smtplib
-    try:
+    try: 
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login("benjaminpannysw@gmail.com", "dvnvnoyttwkxfgqn") 
+            server.login("benjaminpannysw@gmail.com", "pw") 
             server.send_message(message)
         print(f"Email sent to {staff_email}")
     except Exception as e:

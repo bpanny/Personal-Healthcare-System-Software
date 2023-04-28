@@ -117,7 +117,7 @@ def insert_fake_staff(connection):
     fake_first_name = "Jane"
     fake_last_name = "Doe"
     fake_location = "15213"
-    fake_email = "benjaminpanny@gmail.com"
+    fake_email = "email@gmail.com"
     fake_phone = f"555-{random.randint(100, 999)}-{random.randint(1000, 9999)}"
 
     cursor = connection.cursor()

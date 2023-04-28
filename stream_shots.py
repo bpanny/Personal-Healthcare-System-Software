@@ -23,7 +23,7 @@ def send_message(pt_id, message):
 hand_cascade = cv2.CascadeClassifier("hand.xml")
 
 # URL of the livestream
-url = "http://10.140.26.214:8080/shot.jpg"
+url = "http://10.0.0.185:8080/shot.jpg"
 pt_id = 1
 
 # Loop that fetches the latest frame every 2 seconds

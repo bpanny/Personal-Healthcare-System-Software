@@ -68,7 +68,7 @@ def send_email_to_staff(staff_email, subject, body):
         print(f"Email sent to {staff_email}")
     except Exception as e:
         print(f"Error sending email: {e}")
-
+#
 def get_emergency_info(pt_id):
     with ThreadPoolExecutor() as executor:
         pt_location_future = executor.submit(get_patient_location, pt_id)
